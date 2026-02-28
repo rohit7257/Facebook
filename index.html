@@ -1,53 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lamp Login Animation</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#111;
+    overflow:hidden;
+    transition:0.5s;
+}
+
+/* Lamp */
+.lamp{
+    position:absolute;
+    left:15%;
+    top:15%;
+}
+
+.bulb{
+    width:200px;
+    height:120px;
+    background:#fff;
+    border-radius:100px 100px 0 0;
+    position:relative;
+    box-shadow:0 0 0px #ffcc66;
+    transition:0.5s;
+}
+
+.stand{
+    width:10px;
+    height:150px;
+    background:#fff;
+    margin:auto;
+}
+
+.base{
+    width:120px;
+    height:20px;
+    background:#fff;
+    margin:auto;
+    border-radius:20px;
+}
+
+/* Rope */
+.rope{
+    width:2px;
+    height:120px;
+    background:#aaa;
+    position:absolute;
+    left:50%;
+    top:60px;
+    cursor:pointer;
+}
+
+.ball{
+    width:18px;
+    height:18px;
+    background:#ffcc66;
+    border-radius:50%;
+    position:absolute;
+    left:-8px;
+    bottom:-10px;
+}
+
+/* Login Box */
+.login-box{
+    width:300px;
+    padding:30px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(10px);
+    border-radius:15px;
+    color:white;
+    opacity:0;
+    transform:translateY(20px);
+    transition:0.5s;
+}
+
+.login-box.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:20px;
+    background:#fff;
+    cursor:pointer;
+}
+</style>
 </head>
 <body>
 
-<div class="box">
-  <input id="username" placeholder="Email or phone">
-  <input id="password" type="password" placeholder="Password">
+<div class="lamp">
+    <div class="bulb" id="bulb"></div>
+    <div class="rope" id="rope">
+        <div class="ball"></div>
+    </div>
+    <div class="stand"></div>
+    <div class="base"></div>
+</div>
 
-  <button onclick="login()">Log in</button>
-  <button onclick="signup()">Create new account</button>
-
-  <p id="msg"></p>
+<div class="login-box" id="loginBox">
+    <h2>Welcome</h2>
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button>Sign In</button>
 </div>
 
 <script>
-function signup() {
-  fetch("/signup", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      username: username.value,
-      password: password.value
-    })
-  })
-  .then(res => res.json())
-  .then(data => msg.innerText = data.message);
-}
+const rope = document.getElementById("rope");
+const bulb = document.getElementById("bulb");
+const loginBox = document.getElementById("loginBox");
 
-function login() {
-  fetch("/login", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      username: username.value,
-      password: password.value
-    })
-  })
-  .then(res => res.json())
-  .then(data => msg.innerText = data.message);
-}
+let isDragging = false;
+let startY;
+
+rope.addEventListener("mousedown", (e)=>{
+    isDragging = true;
+    startY = e.clientY;
+});
+
+document.addEventListener("mouseup", ()=>{
+    if(isDragging){
+        isDragging = false;
+
+        // Turn Light ON
+        bulb.style.boxShadow = "0 0 60px 20px #ffcc66";
+        document.body.style.background = "#222";
+
+        // Show Welcome Box
+        loginBox.classList.add("show");
+    }
+});
 </script>
-
-</body>
-</html>
 
 </body>
 </html>
